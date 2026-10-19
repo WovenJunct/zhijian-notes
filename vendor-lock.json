@@ -1,0 +1,45 @@
+[
+  {
+    "package": "quill",
+    "sha256": "f6157c72ac9b3f51cdead426335688a027b12405d9d6a4daadd38a676b2d7ff2",
+    "version": "2.0.3",
+    "url": "https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js",
+    "file": "quill.js"
+  },
+  {
+    "package": "quill",
+    "sha256": "1c7948cd13aa92fac6390319bc1e5e461823da171519d3a768db56164f871636",
+    "version": "2.0.3",
+    "url": "https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css",
+    "file": "quill.css"
+  },
+  {
+    "package": "markdown-it",
+    "sha256": "391f2aa638e75e6c7859d0a5c5650ef0956722a45998f17e05b83bc655778e1e",
+    "version": "15.0.3",
+    "url": "https://cdn.jsdelivr.net/npm/markdown-it@15.0.3/dist/browser/markdown-it.umd.min.js",
+    "file": "markdown-it.js"
+  },
+  {
+    "package": "dompurify",
+    "sha256": "cd37898f9782adf54820c413191b5691803f0f137c799d6edcfd38523b4c2c31",
+    "version": "3.4.17",
+    "url": "https://cdn.jsdelivr.net/npm/dompurify@3.4.17/dist/purify.min.js",
+    "file": "purify.js"
+  },
+  {
+    "package": "turndown",
+    "sha256": "c97187f436d41638bf7acf346a39d9d42f2f2c02af18245a297c09e796f8e46f",
+    "version": "7.2.4",
+    "url": "https://cdn.jsdelivr.net/npm/turndown@7.2.4/dist/turndown.js",
+    "file": "turndown.js"
+  },
+  {
+    "version": "0.21.0",
+    "url": "https://repo.maven.apache.org/maven2/org/commonmark/commonmark/0.21.0/commonmark-0.21.0.jar",
+    "sha256": "11cfcf6da0142fb1971c1f40f5924ddded14454e2793d7f1dd87c9f4abe42dfd",
+    "artifactSha256": "81084a7035046fe306f0dbf16ef57a68d08ee5c97004ea867e62b5db46e98afb",
+    "file": "commonmark-java-LICENSE.txt",
+    "package": "commonmark-java"
+  }
+]

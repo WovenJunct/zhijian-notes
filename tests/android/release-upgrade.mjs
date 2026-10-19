@@ -1,0 +1,12 @@
+// Destructive only to this app on an explicitly selected disposable test emulator.
+import {execFileSync} from 'node:child_process';import fs from 'node:fs/promises';import path from 'node:path';import assert from 'node:assert/strict';import {adb,args} from './device-config.mjs';
+if(!process.argv.includes('--reset-test-app'))throw Error('Only run on a disposable test emulator with --reset-test-app: existing app data will be removed before the old-version fixture is created.');
+const oldApk=process.env.PAPER_UPGRADE_FROM_APK||'dist/纸间-1.1.0.apk',newApk=process.env.PAPER_UPGRADE_TO_APK||'dist/纸间-1.2.0.apk';await fs.access(oldApk);await fs.access(newApk);
+const run=(...a)=>execFileSync(adb,[...args,...a],{encoding:'utf8'}),shell=(...a)=>run('shell',...a);
+function ui(){shell('uiautomator','dump','/sdcard/paper-upgrade-ui.xml');return shell('cat','/sdcard/paper-upgrade-ui.xml');}
+async function node(value){for(let i=0;i<15;i++){const xml=ui(),nodes=xml.match(/<node[^>]+>/g)||[];const found=nodes.find(n=>n.includes(`text="${value}"`)||n.includes(`content-desc="${value}"`)||n.includes(`resource-id="${value}"`));if(found)return found;await new Promise(r=>setTimeout(r,250));}throw Error('Upgrade fixture UI control not found: '+value);}
+async function tap(value){const n=await node(value),b=n.match(/bounds="\[(\d+),(\d+)\]\[(\d+),(\d+)\]"/);assert.ok(b);shell('input','tap',String(Math.floor((Number(b[1])+Number(b[3]))/2)),String(Math.floor((Number(b[2])+Number(b[4]))/2)));}
+const witness='Upgrade_Witness_'+Date.now(),content='Offline_content_survives_'+Date.now();
+try{run('uninstall','app.zhijian.notes');}catch{/* Fresh test emulator. */}
+run('install',oldApk);shell('am','start','-W','-n','app.zhijian.notes/.MainActivity');await tap('新建笔记');await tap('Markdown');await tap('note-title');shell('input','text',witness);await tap('markdown-input');shell('input','text',content);await tap('立即保存');await tap('返回笔记');await node('打开笔记：'+witness);
+run('install','-r',newApk);shell('am','start','-W','-n','app.zhijian.notes/.MainActivity');await tap('打开笔记：'+witness);assert.ok(ui().includes(content));assert.match(shell('dumpsys','package','app.zhijian.notes'),/versionName=1\.2\.0/);await fs.mkdir('dist',{recursive:true});await fs.writeFile(path.join('dist','release-upgrade.png'),execFileSync(adb,[...args,'exec-out','screencap','-p']));console.log('PASS Signed 1.1.0 to 1.2.0 upgrade retains the old title and complete note content');
